@@ -1,0 +1,21 @@
+{
+  "name": "fslog",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "sass-loader": "^7.1.0",
+    "webpack": "^4.28.2",
+    "webpack-dev": "^1.1.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.1.2"
+  }
+}
