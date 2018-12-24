@@ -1,9 +1,7 @@
-import $ from 'jQuery';
-
 import StateMachine from './state_machine';
 
-$(document).ready(function() {
-    var player = $("#player");
+$(document).ready(() => {
+  var player = $("#player").get(0);
 
 	$(document).on('keyup', event => {
 		if (event.key === ' ') {
