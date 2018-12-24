@@ -5,15 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>fslog</title>
 </head>
-<body>
+<body id="root">
 <div class="container-fluid">
     <h1>Hello, wordl!</h1>
     <div class="row">
-        <video src="403_6.mp4" width="800" height="400" id="player"></video>
+        <video src="403_6.mp4" width="800" height="400" muted autoplay id="player"></video>
+    </div>
+    <div class="row">
+        <button class="btn btn-primary" id="toggle_play">Toggle play</button>
+        <button class="btn btn-primare" data-bind="click: place">Place</button>
     </div>
 
     <div class="row">
-        <button class="btn btn-primary" id="toggle_play">Toggle play</button>
+        Next: <span data-bind="text: nextPoint().name"></span>
+    </div>
+
+    <div class="row">
+        Totals:
+        <table>
+        <thead><tr>
+            <th>Point</th>
+            <th>Total time</th>
+            <th>Count</th>
+            <th>Mean</th>
+        </tr></thead>
+        <tbody data-bind="foreach: stats()">
+            <tr>
+                <td data-bind="text: point.name"></td>
+                <td data-bind="text: (stats.sum).toFixed(1)"></td>
+                <td data-bind="text: stats.count"></td>
+                <td data-bind="text: (stats.sum / stats.count).toFixed(1)"></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+        Running:
+        <table>
+        <thead><tr>
+            <th>Point</th>
+            <th>Total time</th>
+            <th>Point time</th>
+        </tr></thead>
+        <tbody data-bind="foreach: points">
+            <tr>
+                <td data-bind="text: name"></td>
+                <td data-bind="text: (time - $parent.startTime()).toFixed(1)"></td>
+                <!-- ko if: $index() !== 0 -->
+                    <td data-bind="text: (time - $parent.points()[$index() - 1].time).toFixed(1)"></td>
+                <!-- /ko -->
+            </tr>
+        </tbody>
+        </table>
     </div>
 </div>
 

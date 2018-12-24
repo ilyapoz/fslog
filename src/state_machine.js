@@ -29,6 +29,6 @@ class StateMachine {
     }
 }
 
-module.exports = { 
+export {
     StateMachine
 }
