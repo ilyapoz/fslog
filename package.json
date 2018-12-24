@@ -4,18 +4,21 @@
   "description": "",
   "private": true,
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "start": "webpack-dev-server --open"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "copy-webpack-plugin": "^4.6.0",
     "jquery": "^3.3.1",
     "sass-loader": "^7.1.0",
     "webpack": "^4.28.2",
     "webpack-dev": "^1.1.1"
   },
   "devDependencies": {
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.13"
   }
 }

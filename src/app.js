@@ -3,20 +3,23 @@ import $ from 'jQuery';
 import StateMachine from './state_machine';
 
 $(document).ready(function() {
+    var player = $("#player");
+
 	$(document).on('keyup', event => {
 		if (event.key === ' ') {
-            console.log('Play');
+      player.play();
 		} else if (event.key === 'ArrowLeft') {
-            console.log('Step back');
+      console.log('Step back');
 		} else if (event.key === 'ArrowRight') {
-            console.log('Step forward');
+      console.log('Step forward');
 		} else if (event.key === 'ArrowDown') {
-            console.log('Rewind');
+      console.log('Rewind');
 		} else if (event.key === 'ArrowUp') {
-            console.log('Forward');
+      console.log('Forward');
 		}
 	});
 	$('#toggle_play').on('click', event => {
-        console.log('Play');
+    console.log('Play');
+    player.play();
 	});
 });
