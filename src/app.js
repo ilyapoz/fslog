@@ -1,21 +1,8 @@
 import ko from 'knockout';
-import {StateMachine} from './state_machine';
 import vfs from './vfs';
-
-class UIState extends StateMachine {
-  constructor(init_state) {
-    super(init_state);
-  }
-}
-
-class Init {
-  run(machine) {
-  }
-}
 
 class FsViewModel {
   constructor() {
-    this.state = new UIState(new Init())
     this.points = ko.observableArray();
   }
 
