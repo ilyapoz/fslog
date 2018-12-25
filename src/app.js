@@ -60,6 +60,10 @@ class FsViewModel {
     const length = this.points().length;
     return this.round.points[length % this.round.points.length];
   }
+
+  tooglePlay() {
+    player.play();
+  }
 }
 
 $(document).ready(() => {
@@ -77,10 +81,6 @@ $(document).ready(() => {
     } else if (event.key === 'ArrowUp') {
       console.log('Forward');
     }
-  });
-  $('#toggle_play').on('click', event => {
-    console.log('Play');
-    player.play();
   });
 
   var vm = new FsViewModel();
