@@ -78,23 +78,23 @@ class FsViewModel {
 $(document).ready(() => {
   var player = $("#player").get(0);
 
-	$(document).on('keyup', event => {
-		if (event.key === ' ') {
+  $(document).on('keyup', event => {
+    if (event.key === ' ') {
       player.play();
-		} else if (event.key === 'ArrowLeft') {
+    } else if (event.key === 'ArrowLeft') {
       console.log('Step back');
-		} else if (event.key === 'ArrowRight') {
+    } else if (event.key === 'ArrowRight') {
       console.log('Step forward');
-		} else if (event.key === 'ArrowDown') {
+    } else if (event.key === 'ArrowDown') {
       console.log('Rewind');
-		} else if (event.key === 'ArrowUp') {
+    } else if (event.key === 'ArrowUp') {
       console.log('Forward');
-		}
-	});
-	$('#toggle_play').on('click', event => {
+    }
+  });
+  $('#toggle_play').on('click', event => {
     console.log('Play');
     player.play();
-	});
+  });
 
   var vm = new FsViewModel();
   vm.setup({
