@@ -86,7 +86,7 @@ $(document).ready(() => {
   var vm = new FsViewModel();
   vm.setup({
     draw: [
-      vfs.G, vfs._13, vfs._14
+      vfs.Random('G'), vfs.Block('13'), vfs.Block('14')
     ]
   });
 
