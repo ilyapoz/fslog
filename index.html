@@ -37,8 +37,14 @@
             <tr>
                 <td data-bind="text: point.name"></td>
                 <td data-bind="text: (stats.sum).toFixed(1)"></td>
-                <td data-bind="text: stats.count"></td>
-                <td data-bind="text: (stats.sum / stats.count).toFixed(1)"></td>
+                <!-- ko if: $index() === 0 -->
+                    <td data-bind="text: stats.count"></td>
+                    <td data-bind="text: (stats.sum / (stats.count - 1)).toFixed(1)"></td>
+                <!-- /ko -->
+                <!-- ko ifnot: $index() === 0 -->
+                    <td data-bind="text: stats.count"></td>
+                    <td data-bind="text: (stats.sum / stats.count).toFixed(1)"></td>
+                <!-- /ko -->
             </tr>
         </tbody>
         </table>
