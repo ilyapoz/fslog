@@ -61,8 +61,12 @@ class FsViewModel {
     return this.round.points[length % this.round.points.length];
   }
 
-  tooglePlay() {
-    player.play();
+  togglePlay() {
+    if (player.paused) {
+      player.play();
+    } else {
+      player.pause();
+    }
   }
 }
 
