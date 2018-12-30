@@ -10,4 +10,12 @@ function Block(name) {
   }
 }
 
-export default {Randem, Block};
+function Position(name) {
+  if (name.length == 1 && 'A' <= name && name <= 'Q') {
+    return Random(name);
+  }
+
+  return Block(name);
+}
+
+export default {Random, Block, Position};

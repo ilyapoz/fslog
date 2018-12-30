@@ -66,6 +66,14 @@ class FsViewModel {
   }
 }
 
+function parseDraw(str) {
+  var result = [];
+  for (const element of str.split('-')) {
+    result.push(vfs.Position(element));
+  }
+  return result;
+}
+
 $(document).ready(() => {
   var player = $("#player").get(0);
 
@@ -85,9 +93,7 @@ $(document).ready(() => {
 
   var vm = new FsViewModel();
   vm.setup({
-    draw: [
-      vfs.Random('G'), vfs.Block('13'), vfs.Block('14')
-    ]
+    draw: parseDraw($("#draw").text())
   });
 
   ko.applyBindings(vm, document.getElementById('root'));
