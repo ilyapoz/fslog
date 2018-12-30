@@ -61,6 +61,10 @@ class FsViewModel {
     return this.round.points[length % this.round.points.length];
   }
 
+  playbackRate(rate) {
+    player.playbackRate = rate;
+  }
+
   togglePlay() {
     if (player.paused) {
       player.play();
