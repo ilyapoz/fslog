@@ -108,9 +108,7 @@ $(document).ready(() => {
   });
 
   var vm = new FsViewModel();
-  vm.setup({
-    draw: vfs.ParseDraw(vm.draw())
-  });
+  vm.updateDraw();
 
   ko.applyBindings(vm, document.getElementById('root'));
 });
