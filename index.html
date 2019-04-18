@@ -11,8 +11,15 @@
 <nav class="navbar sticky-top navbar-dark bg-dark">
     <a class="navbar-brand" href="#">Hello, wordl!</a>
     <div class="form-inline">
-        <input type="text" class="form-control my-sm-2" id="draw" data-bind="value: draw"> </input>
-        <button class="btn btn-danger my-2 my-sm-0" data-bind="click: updateDraw">Update</button>
+        <input type="file" accept="video/*" class="text-light" data-bind="openVideo: video">
+    </div>
+    <div class="form-inline">
+        <div class="input-group">
+            <input type="text" class="form-control mr-2" data-bind="value: draw">
+            <div class="input-group-append">
+                <button class="btn btn-danger" data-bind="click: updateDraw">Update</button>
+            </div>
+        </div>
     </div>
     <div class="btn-toolbar" role="toolbar" aria-label="Player control">
         <div class="btn-group mr-2" role="group" aria-label="Playback rate">
@@ -25,15 +32,18 @@
         </div>
         <div class="btn-group mr-2" role="group">
             <button class="btn btn-danger" data-bind="click: reset">Reset</button>
-            <button class="btn btn-primary" data-bind="click: place">Place</button>
+            <button class="btn btn-primary" style="width: 200px" data-bind="click: place">
+                Next point <span data-bind="text: nextPoint().name">
+            </button>
         </div>
-        <h3 class="text-light" style="width:200px">Next: <span data-bind="text: nextPoint().name"></span></h3>
     </div>
 </nav>
-<div class="container-fluid">
+<div class="container-fluid pt-3">
     <div class="row">
         <div class="col-md-7">
-            <video class="position-fixed" height="500px" src="video.mp4" muted controls autoplay id="player"></video>
+            <video width="100%" class="sticky-top" data-bind="attr: {src: video}"
+                muted controls autoplay id="player">
+            </video>
         </div>
         <div class="col-md-3">
             <div class="row">
@@ -88,6 +98,6 @@
     </div>
 
 </div>
-    <script type="text/javascript" src="main.bundle.js"></script>
+<script type="text/javascript" src="main.bundle.js"></script>
 </body>
 </html>

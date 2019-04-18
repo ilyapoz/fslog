@@ -19,7 +19,6 @@ function Position(name) {
 }
 
 function ParseDraw(str) {
-console.log(str);
   var result = [];
   for (const element of str.split('-')) {
     result.push(Position(element));

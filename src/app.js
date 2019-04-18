@@ -5,16 +5,18 @@ import vfs from './vfs';
 
 class FsViewModel {
   constructor() {
+    this.round = ko.observable()
     this.points = ko.observableArray();
     this.draw = ko.observable("G-13-14");
+    this.video = ko.observable("video.mp4");
   }
 
   stats() {
-    if (!this.round) {
+    if (!this.round()) {
       return [];
     }
     var map = {};
-    for (const point of this.round.points) {
+    for (const point of this.round().points) {
       map[point.name] = {
         sum: 0,
         count: 0
@@ -29,7 +31,7 @@ class FsViewModel {
     }
 
     var result = [];
-    for (const point of this.round.points) {
+    for (const point of this.round().points) {
       result.push({
         point: point,
         stats: map[point.name]
@@ -39,16 +41,20 @@ class FsViewModel {
   }
 
   setup(round) {
-    this.round = round;
-    this.round.points = []
+    var new_round = {
+      round,
+      points: []
+    }
     for (const element of round.draw) {
       for (const point of element.points) {
-        this.round.points.push(point);
+        new_round.points.push(point);
       }
     }
+    this.round(new_round)
   }
 
   updateDraw() {
+    this.points.removeAll();
     this.setup({draw: vfs.ParseDraw(this.draw())});
   }
 
@@ -70,7 +76,7 @@ class FsViewModel {
 
   nextPoint() {
     const length = this.points().length;
-    return this.round.points[length % this.round.points.length];
+    return this.round().points[length % this.round().points.length];
   }
 
   playbackRate(rate) {
@@ -109,6 +115,21 @@ $(document).ready(() => {
 
   var vm = new FsViewModel();
   vm.updateDraw();
+
+  ko.bindingHandlers.openVideo = {
+    init: function (element, valueAccessor) {
+        $(element).change(function () {
+            URL = window.URL || window.webkitURL
+            valueAccessor()(URL.createObjectURL(element.files[0]));
+        });
+    },
+    update: function (element, valueAccessor) {
+        if (ko.unwrap(valueAccessor()) === null) {
+            $(element).wrap('<form>').closest('form').get(0).reset();
+            $(element).unwrap();
+        }
+    }
+  };
 
   ko.applyBindings(vm, document.getElementById('root'));
 });
