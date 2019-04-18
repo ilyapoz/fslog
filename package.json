@@ -5,16 +5,22 @@
   "private": true,
   "scripts": {
     "build": "webpack",
+    "package": "webpack; ./package.sh",
     "start": "webpack-dev-server --open"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bootlint": "^0.16.5",
+    "bootstrap": "^4.3.1",
     "copy-webpack-plugin": "^4.6.0",
+    "css-loader": "^2.1.1",
+    "http-server": "^0.11.1",
     "jquery": "^3.3.1",
     "knockout": "^3.4.2",
-    "sass-loader": "^7.1.0",
+    "mini-css-extract-plugin": "^0.6.0",
+    "popper.js": "^1.15.0",
     "webpack": "^4.28.2",
     "webpack-dev": "^1.1.1"
   },

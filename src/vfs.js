@@ -18,4 +18,13 @@ function Position(name) {
   return Block(name);
 }
 
-export default {Random, Block, Position};
+function ParseDraw(str) {
+console.log(str);
+  var result = [];
+  for (const element of str.split('-')) {
+    result.push(Position(element));
+  }
+  return result;
+}
+
+export default {Random, Block, Position, ParseDraw};

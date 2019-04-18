@@ -1,9 +1,12 @@
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import ko from 'knockout';
 import vfs from './vfs';
 
 class FsViewModel {
   constructor() {
     this.points = ko.observableArray();
+    this.draw = ko.observable("G-13-14");
   }
 
   stats() {
@@ -45,6 +48,15 @@ class FsViewModel {
     }
   }
 
+  updateDraw() {
+    this.setup({draw: vfs.ParseDraw(this.draw())});
+  }
+
+  reset() {
+    this.points.removeAll();
+    player.currentTime = 0;
+  }
+
   place() {
     this.points.push({
       name: this.nextPoint().name,
@@ -72,14 +84,10 @@ class FsViewModel {
       player.pause();
     }
   }
-}
 
-function parseDraw(str) {
-  var result = [];
-  for (const element of str.split('-')) {
-    result.push(vfs.Position(element));
+  goTo(point) {
+    player.currentTime = point.time;
   }
-  return result;
 }
 
 $(document).ready(() => {
@@ -101,7 +109,7 @@ $(document).ready(() => {
 
   var vm = new FsViewModel();
   vm.setup({
-    draw: parseDraw($("#draw").text())
+    draw: vfs.ParseDraw(vm.draw())
   });
 
   ko.applyBindings(vm, document.getElementById('root'));
