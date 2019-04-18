@@ -2,9 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
+  mode: process.NODE_ENV || 'development',
   entry: './src/app.js',
   devtool: 'inline-source-map',
   devServer: {
@@ -14,6 +16,9 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
+  },
+  optimization: {
+    minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin()],
   },
   plugins: [
     new webpack.ProvidePlugin({
@@ -39,7 +44,7 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-//              hmr: process.env.NODE_ENV === 'development',
+              hmr: process.env.NODE_ENV === 'development',
             }
           },
           'css-loader',
