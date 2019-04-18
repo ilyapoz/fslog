@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "package": "webpack --mode production; ./package.sh",
+    "release": "webpack --mode production; ./release.sh",
     "start": "webpack-dev-server --open"
   },
   "keywords": [],
