@@ -3,6 +3,7 @@ import './App.scss';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import Dev from './Dev.js';
 import Player from './Player.js';
 import Stats from './Stats.js';
 import vfs from './vfs.js';
@@ -31,10 +32,12 @@ class App extends React.Component {
               <Player video={this.state.video} player={this.player}/>
             </div>
             <div className="col-lg-7">
-              <div className="btn-toolbar">
-                <button className="mr-2 btn btn-primary" onClick={this.savePoints}>Save</button>
-                <button className="btn btn-primary" onClick={this.loadPoints}>Load</button>
-              </div>
+              <Dev>
+                <div className="btn-toolbar">
+                  <button className="mr-2 btn btn-primary" onClick={this.savePoints}>Save</button>
+                  <button className="btn btn-primary" onClick={this.loadPoints}>Load</button>
+                </div>
+              </Dev>
               <Stats points={this.state.points} draw={this.state.draw} onPointClick={this.handlePointClick}/>
             </div>
           </div>
