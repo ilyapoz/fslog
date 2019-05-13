@@ -10,11 +10,11 @@ class Stats extends React.Component {
 
   render() {
     const stats = this.props.draw.stats(this.props.points);
-    const num_pages = Math.max(1, Math.ceil(this.props.points.length / this.props.draw.num_points));
+    const num_pages = Math.max(1, Math.ceil(this.props.points.length / this.props.draw.num_formations));
     const pages = Array.from({length: num_pages}, (v, i) => <th key={i}>{i + 1}</th>);
     const points = stats.map((point, id) => (
       <tr key={id}>
-        <td><div>{this.props.draw.point(id).name}</div></td>
+        <td><div>{this.props.draw.formation(id).name}</div></td>
         {
           Array.from({length: num_pages}, (v, id) => {
             if (id >= point.length) {

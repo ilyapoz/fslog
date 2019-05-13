@@ -1,12 +1,12 @@
 function Random(name) {
   return {
-    points: [{name}]
+    formations: [{name}]
   }
 }
 
 function Block(name) {
   return {
-    points: [{name: name + '+'}, {name: name + '-'}]
+    formations: [{name: name + '+'}, {name: name + '-'}]
   }
 }
 
@@ -26,21 +26,21 @@ class Draw {
       return draw;
     }, []);
 
-    this.points = this.draw.reduce((points, element) => {
-      for (const point of element.points) {
-        points.push(point);
+    this.formations = this.draw.reduce((formations, element) => {
+      for (const formation of element.formations) {
+        formations.push(formation);
       }
-      return points;
+      return formations;
     }, []);
 
-    this.num_points = this.points.length;
+    this.num_formations = this.formations.length;
   }
 
   stats(points) {
-    let result = Array.from({length: this.num_points}, (v, i) => []);
+    let result = Array.from({length: this.num_formations}, (v, i) => []);
     const start_time = points.length > 0 ? points[0].time : null;
     return points.reduce((res, point, i, points) => {
-      res[i % this.num_points].push(Object.assign({}, point, {
+      res[i % this.num_formations].push(Object.assign({}, point, {
         id: i,
         cumulative: point.time - start_time,
         incremental: i > 0 ? point.time - points[i - 1].time : 0,
@@ -49,8 +49,8 @@ class Draw {
     }, result);
   }
 
-  point(seq) {
-    return this.points[seq % this.num_points];
+  formation(seq) {
+    return this.formations[seq % this.num_formations];
   }
 }
 

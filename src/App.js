@@ -75,7 +75,7 @@ class App extends React.Component {
             <div className="btn-group" role="group">
               <button className="btn btn-danger" onClick={this.reset}>Reset</button>
               <button className="btn btn-primary" style={{width: '200px'}} onClick={this.place}>
-                Next point <span>{this.nextPoint(this.state).name}</span>
+                Next formation <span>{this.nextFormation(this.state).name}</span>
               </button>
             </div>
           </div>
@@ -128,8 +128,8 @@ class App extends React.Component {
       : this.state.points[point_id - 1].time;
   }
 
-  nextPoint(state) {
-    return state.draw.point(state.points.length);
+  nextFormation(state) {
+    return state.draw.formation(state.points.length);
   }
 
   savePoints = () => {
