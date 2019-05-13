@@ -1,64 +1,99 @@
 import React from 'react';
 
+import Time from './Time.js';
+
 class Stats extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      incremental: true,
+      cumulative: false,
     }
   }
 
   render() {
     const stats = this.props.draw.stats(this.props.points);
-    const num_pages = Math.max(1, Math.ceil(this.props.points.length / this.props.draw.num_formations));
-    const pages = Array.from({length: num_pages}, (v, i) => <th key={i}>{i + 1}</th>);
-    const points = stats.map((point, id) => (
+    const num_points = this.props.points.length;
+    const pages = Array.from({length: stats.pages.length}, (v, i) => (
+      <th scope="col" key={i}>
+        <a href="/#" onClick={(e) => this.handlePageClick(e, stats, i)}>{i + 1}</a>
+      </th>
+    ));
+    const points = stats.formations.map((formation, id) => (
       <tr key={id}>
-        <td><div>{this.props.draw.formation(id).name}</div></td>
+        <th scope="row">
+          <a href="/#" onClick={(e) => this.handleFormationClick(e, stats, id)}>
+            {this.props.draw.formation(id).name}
+          </a>
+        </th>
         {
-          Array.from({length: num_pages}, (v, id) => {
-            if (id >= point.length) {
-              return null;
+          Array.from({length: stats.pages.length}, (v, id) => {
+            if (id >= formation.length) {
+              return <td key={id}/>;
             }
-            const current_point = point[id];
+            const point = formation[id];
             return (
-              <a href="/#" onClick={(e) => this.handlePointClick(e, current_point.id)}>
-                {this.state.incremental ? current_point.incremental.toFixed(1) : current_point.cumulative.toFixed(1)}
-              </a>
+              <td key={id} className={this.pointActive(point) ? "table-active": ""}>
+                <a href="/#" onClick={(e) => this.handlePointClick(e, stats, point.id)}>
+                  <Time>{this.state.cumulative ? point.cumulative : point.incremental}</Time>
+                </a>
+              </td>
             );
-          }).map((v, id) => <td key={id}>{v}</td>)
+          })
         }
-        <td><div>{point.reduce((res, el) => res + el.incremental, 0).toFixed(1)}</div></td>
+        <td><div><Time>{formation.reduce((res, el) => res + el.incremental, 0)}</Time></div></td>
       </tr>
     ));
     return (
       <>
-        <div className="form-check">
-          <label className="form-check-label">
-          <input type="checkbox" className="form-check-input"
-            value={this.state.incremental} onChange={this.incrementalChanged}/>
-          Incremental time</label>
-        </div>
         <table className="table">
-        <thead><tr>
-            <th></th>
+        <thead>
+          <tr>
+            <th scope="col"></th>
             {pages}
-            <th>Total</th>
-        </tr></thead>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
         <tbody>
           {points}
         </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Total</th>
+            {stats.pages.map((page, id) => <th scope="col" key={id}><Time>{page.finish - page.start}</Time></th>)}
+            <th scope="col"><Time>{(num_points === 0 ? 0 : stats.finish_time - stats.start_time)}</Time></th>
+          </tr>
+        </tfoot>
         </table>
+        <div className="form-check">
+          <label className="form-check-label">
+          <input type="checkbox" className="form-check-input"
+            checked={this.state.cumulative} onChange={this.cumulativeChanged}/>
+          Cumulative time</label>
+        </div>
       </>
     );
   }
 
-  incrementalChanged = (e) => {
-    this.setState({incremental: e.target.checked});
+  pointActive(point) {
+    return point.time - point.incremental + 0.1 < this.props.currentTime && this.props.currentTime < point.time - 0.1;
   }
 
-  handlePointClick(e, point_id) {
-    this.props.onPointClick(point_id);
+  cumulativeChanged = (e) => {
+    this.setState({cumulative: e.target.checked});
+  }
+
+  handlePointClick(e, stats, point_id) {
+    this.props.onPointClick(stats, point_id);
+    e.preventDefault();
+  }
+
+  handlePageClick(e, stats, page) {
+    this.props.onPageClick(stats, page);
+    e.preventDefault();
+  }
+
+  handleFormationClick(e, stats, formation) {
+    this.props.onFormationClick(stats, formation);
     e.preventDefault();
   }
 };

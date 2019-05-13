@@ -37,16 +37,33 @@ class Draw {
   }
 
   stats(points) {
-    let result = Array.from({length: this.num_formations}, (v, i) => []);
     const start_time = points.length > 0 ? points[0].time : null;
-    return points.reduce((res, point, i, points) => {
+    const formations = points.reduce((res, point, i, points) => {
       res[i % this.num_formations].push(Object.assign({}, point, {
         id: i,
         cumulative: point.time - start_time,
         incremental: i > 0 ? point.time - points[i - 1].time : 0,
       }));
       return res;
-    }, result);
+    }, Array.from({length: this.num_formations}, () => []));
+
+    const num_points = points.length;
+    const num_pages = Math.max(1, Math.ceil(num_points / this.num_formations));
+    const pages = Array.from({length: num_pages}, (v, i) => {
+      if (points.length === 0) {
+        return {start: 0.0, finish: 0.0};
+      }
+      const start = Math.max(0, i * this.num_formations - 1);
+      const end = Math.min((i + 1) * this.num_formations - 1, points.length - 1);
+      return {start: points[start].time, finish: points[end].time};
+    });
+    const finish_time = points.length > 0 ? points[points.length - 1].time : null;
+    return {
+      start_time,
+      finish_time,
+      formations,
+      pages,
+    };
   }
 
   formation(seq) {
