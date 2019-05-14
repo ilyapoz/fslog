@@ -8,7 +8,8 @@ class Player extends React.Component {
         onTimeUpdate={this.handleTimeUpdate}
         className="sticky-top"
         width="100%"
-        muted controls autoPlay />
+        muted controls autoPlay
+        playsInline />
     );
   }
 
