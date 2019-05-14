@@ -56,7 +56,9 @@ export default connect(state => ({
                   <button className="btn btn-primary" onClick={this.togglePlay}>Toggle play</button>
                 </div>
                 <div className="btn-group" role="group">
-                  <PointsToolbar currentTime={this.state.currentTime} />
+                  <PointsToolbar
+                    currentTime={this.state.currentTime}
+                    currentRealtime={() => this.player.current.currentTime}/>
                 </div>
               </div>
             </div>

@@ -25,7 +25,7 @@ export default connect(state => ({
   }
 
   place = () => {
-    this.props.placePoint(this.player.current.currentTime);
+    this.props.placePoint(this.props.currentRealtime());
   }
 
   nextFormation() {
