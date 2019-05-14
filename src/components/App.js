@@ -22,6 +22,7 @@ export default connect(state => ({
   }
 )(class App extends React.Component {
   state = {
+    // used for interface updates that allow some lag, pass currentRealtime callback to critical components
     currentTime: 0,
   };
   player = React.createRef();
@@ -57,7 +58,7 @@ export default connect(state => ({
                 <div className="btn-group" role="group">
                   <PointsToolbar
                     currentTime={this.state.currentTime}
-                    currentRealtime={() => this.player.current.currentTime}/>
+                    currentRealtime={this.currentRealtime}/>
                 </div>
               </ButtonToolbar>
             </div>
@@ -86,4 +87,6 @@ export default connect(state => ({
   playbackRate = rate => {
     this.player.current.playbackRate = rate;
   }
+
+  currentRealtime = () => this.player.current.currentTime;
 });
