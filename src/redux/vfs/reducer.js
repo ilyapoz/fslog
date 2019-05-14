@@ -9,6 +9,7 @@ const defaultState = (() => {
 
   return {
     draw,
+    drawId: 0, // changes for any draw update
     points: [],
     stats: draw.stats([]),
     loopSegments: [],
@@ -39,6 +40,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         draw,
+        drawId: state.drawId + 1,
         points: [],
         stats: draw.stats([]),
         loopSegments: [],
@@ -57,6 +59,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         draw,
+        drawId: state.drawId + 1,
         points,
         stats: draw.stats(points),
         loopSegments: [],

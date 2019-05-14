@@ -14,6 +14,7 @@ import VideoSelector from './VideoSelector';
 export default connect(state => ({
     video: state.vfs.video,
     draw: state.vfs.draw,
+    drawId: state.vfs.drawId,
   }), {
   }
 )(class App extends React.Component {
@@ -37,7 +38,7 @@ export default connect(state => ({
           <div className="row">
             <div className="col-lg-5">
               <div className="form-inline mb-4">
-                <DrawEditor />
+                <DrawEditor key={this.props.drawId} />
                 <VideoSelector />
               </div>
               <Player

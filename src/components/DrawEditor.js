@@ -16,7 +16,7 @@ export default connect(state => ({
       <div className="input-group">
         <input type="text" className="form-control" value={this.state.drawText} onChange={this.updateDrawText}/>
         <div className="input-group-append">
-          <button className="btn btn-link" type="button" onClick={this.updateDraw}>Update</button>
+          <button className="btn btn-danger" type="button" onClick={this.updateDraw}>Update</button>
         </div>
       </div>
     );
