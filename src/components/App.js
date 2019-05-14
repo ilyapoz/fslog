@@ -3,7 +3,7 @@ import './App.scss';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { Container, Row, Col, Navbar, ButtonToolbar } from 'react-bootstrap';
+import { Container, Row, Col, Navbar, ButtonToolbar, Form } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
@@ -40,10 +40,10 @@ export default connect(state => ({
         <Container fluid={true} className="p-3">
           <Row>
             <Col lg={5}>
-              <div className="form-inline mb-4">
+              <Form inline className="mb-2">
                 <DrawEditor />
                 <VideoSelector />
-              </div>
+              </Form>
               <Player
                 video={this.props.video}
                 player={this.player}

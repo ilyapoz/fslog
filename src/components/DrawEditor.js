@@ -16,7 +16,7 @@ export default connect(state => ({
   }
 
   return (
-    <Form.Group>
+    <Form.Group className="mb-2">
       <Form.Label className="mr-2">Draw:</Form.Label>
       <Form.Control type="text" value={draw.str} onChange={updateDraw} />
     </Form.Group>
