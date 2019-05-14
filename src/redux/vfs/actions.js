@@ -5,7 +5,7 @@ export const Type = {
   'SAVE_POINTS': 'SAVE_POINTS',
   'SET_DRAW': 'SET_DRAW',
   'SET_LOOP_SEGMENTS': 'SET_LOOP_SEGMENTS',
-  'LOAD_VIDEO': 'LOAD_VIDEO',
+  'OPEN_VIDEO': 'OPEN_VIDEO',
 };
 
 export const resetPoints = () => ({
@@ -24,12 +24,13 @@ export const setDraw = text => ({
 
 export const loadPoints = () => ({ type: Type.LOAD_POINTS });
 export const savePoints = () => ({ type: Type.SAVE_POINTS });
+
 export const setLoopSegments = segments => ({
   type: Type.SET_LOOP_SEGMENTS,
   payload: segments
 });
 
 export const openVideo = video => ({
-  type: Type.LOAD_VIDEO,
+  type: Type.OPEN_VIDEO,
   payload: video,
 });

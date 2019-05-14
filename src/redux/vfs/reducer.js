@@ -2,14 +2,19 @@ import {Type} from './actions';
 
 import vfs from '../../lib/vfs';
 
-const defaultDraw = 'G-13-14';
 
-const defaultState = {
-  points: [],
-  draw: new vfs.Draw(defaultDraw),
-  loopSegments: [],
-  video: 'video.mp4',
-};
+const defaultState = (() => {
+  const drawText = 'G-13-14';
+  const draw = new vfs.Draw(drawText);
+
+  return {
+    draw,
+    points: [],
+    stats: draw.stats([]),
+    loopSegments: [],
+    video: 'video.mp4',
+  };
+})();
 
 export default (state = defaultState, action) => {
   switch (action.type) {
@@ -17,37 +22,46 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         points: [],
+        stats: state.draw.stats([]),
         loopSegments: [],
       };
 
     case Type.PLACE:
+      const new_points = [...state.points, { time: action.payload }];
       return {
         ...state,
-        points: [ ...state.points, { time: action.payload } ],
+        points: new_points,
+        stats: state.draw.stats(new_points), // TODO: optimize here
       };
 
-    case Type.SET_DRAW:
+    case Type.SET_DRAW: {
+      const draw = new vfs.Draw(action.payload);
       return {
         ...state,
+        draw,
         points: [],
+        stats: draw.stats([]),
         loopSegments: [],
-        draw: new vfs.Draw(action.payload),
       };
+    }
 
     case Type.SAVE_POINTS:
       localStorage.setItem('draw', state.draw.str);
       localStorage.setItem('points', JSON.stringify(state.points));
       return state;
 
-    case Type.LOAD_POINTS:
-      const draw = localStorage.getItem('draw');
+    case Type.LOAD_POINTS: {
+      const drawText = localStorage.getItem('draw');
+      const draw = new vfs.Draw(drawText);
       const points = JSON.parse(localStorage.getItem('points'));
       return {
         ...state,
-        draw: new vfs.Draw(draw),
-        points: points,
+        draw,
+        points,
+        stats: draw.stats(points),
         loopSegments: [],
       };
+    }
 
     case Type.SET_LOOP_SEGMENTS:
       return {
@@ -60,6 +74,7 @@ export default (state = defaultState, action) => {
         ...state,
         video: action.payload,
         points: [],
+        stats: state.draw.stats([]),
         loopSegments: [],
       };
 

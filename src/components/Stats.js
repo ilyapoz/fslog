@@ -1,29 +1,41 @@
 import React from 'react';
 
+import { connect } from 'react-redux';
+import { loadPoints, savePoints, setLoopSegments } from '../redux/vfs/actions';
+
+import Dev from './Dev';
 import Time from './Time.js';
 
-export default class Stats extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      cumulative: false,
-    }
+export default connect(state => ({
+    points: state.vfs.points,
+    stats: state.vfs.stats,
+    draw: state.vfs.draw,
+    loopSegments: state.vfs.loopSegments,
+  }),
+  {
+    loadPoints,
+    savePoints,
+    setLoopSegments,
+  }
+)(class Stats extends React.Component {
+  state = {
+    cumulative: false,
   }
 
   render() {
-    const stats = this.props.draw.stats(this.props.points);
+    const stats = this.props.stats;
     const num_points = this.props.points.length;
     const pages = Array.from({length: stats.pages.length}, (v, i) => (
       <th scope="col" key={i}>
-        <a href="/#" onClick={(e) => this.handlePageClick(e, stats, i)}>{i + 1}</a>
+        <button className="btn btn-link" onClick={() => { this.handlePageClick(i) }}>{i + 1}</button>
       </th>
     ));
     const points = stats.formations.map((formation, id) => (
       <tr key={id}>
         <th scope="row">
-          <a href="/#" onClick={(e) => this.handleFormationClick(e, stats, id)}>
+          <button className="btn btn-link" onClick={() => { this.handleFormationClick(id) }}>
             {this.props.draw.formation(id).name}
-          </a>
+          </button>
         </th>
         {
           Array.from({length: stats.pages.length}, (v, id) => {
@@ -33,9 +45,9 @@ export default class Stats extends React.Component {
             const point = formation[id];
             return (
               <td key={id} className={this.pointActive(point) ? "table-active": ""}>
-                <a href="/#" onClick={(e) => this.handlePointClick(e, stats, point.id)}>
+                <button className="btn btn-link" onClick={() => { this.handlePointClick(point.id) }}>
                   <Time>{this.state.cumulative ? point.cumulative : point.incremental}</Time>
-                </a>
+                </button>
               </td>
             );
           })
@@ -70,6 +82,17 @@ export default class Stats extends React.Component {
             checked={this.state.cumulative} onChange={this.cumulativeChanged}/>
           Cumulative time</label>
         </div>
+        <div className="btn-toolbar mt-4">
+          <Dev>
+              <button className="btn btn-primary" onClick={this.props.savePoints}>Save</button>
+              <button className="ml-2 btn btn-primary" onClick={this.props.loadPoints}>Load</button>
+          </Dev>
+          <button className="btn btn-danger ml-2"
+              disabled={this.props.loopSegments.length === 0}
+              onClick={this.resetLoopSegments}>
+            <span className="gryphicon glyphicon-search"/>Cancel loop
+          </button>
+        </div>
       </>
     );
   }
@@ -82,18 +105,26 @@ export default class Stats extends React.Component {
     this.setState({cumulative: e.target.checked});
   }
 
-  handlePointClick(e, stats, point_id) {
-    this.props.onPointClick(stats, point_id);
-    e.preventDefault();
+  handlePointClick = (point_id) => {
+    const start = point_id > 0 ?
+      this.props.points[point_id - 1].time :
+      Math.max(0, this.props.points[0].time - 1.5);
+    const finish = this.props.points[point_id].time;
+
+    this.props.setLoopSegments([{start, finish}]);
   }
 
-  handlePageClick(e, stats, page) {
-    this.props.onPageClick(stats, page);
-    e.preventDefault();
+  handlePageClick = (page) => {
+    this.props.setLoopSegments([this.props.stats.pages[page]]);
   }
 
-  handleFormationClick(e, stats, formation) {
-    this.props.onFormationClick(stats, formation);
-    e.preventDefault();
+  handleFormationClick = (formation) => {
+    const loopSegments = this.props.stats.formations[formation].map(point =>
+        ({start: point.time - point.incremental, finish: point.time}));
+    this.props.setLoopSegments(loopSegments);
   }
-};
+
+  resetLoopSegments = () => {
+    this.props.setLoopSegments([]);
+  }
+});
