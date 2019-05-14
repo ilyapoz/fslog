@@ -6,7 +6,7 @@ export default class Player extends React.Component {
       <video ref={this.props.player}
         src={this.props.video}
         onTimeUpdate={this.handleTimeUpdate}
-        className="sticky-top"
+        className=""
         width="100%"
         muted controls autoPlay
         playsInline />
@@ -19,6 +19,7 @@ export default class Player extends React.Component {
     if (jump) {
       player.currentTime = jump;
     }
+    this.props.onTimeUpdate(player.currentTime);
   }
 
   calculateJump(time) {

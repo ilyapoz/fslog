@@ -3,21 +3,19 @@ import './App.scss';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { connect } from 'react-redux';
+import { resetPoints, placePoint, loadPoints, savePoints, setDraw, setLoopSegments, openVideo } from '../redux/vfs/actions';
+
 import Dev from './Dev';
 import Player from './Player';
 import Stats from './Stats';
-import vfs from '../lib/vfs.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const default_draw = 'G-13-14';
     this.state = {
-      drawText: default_draw,
-      draw: new vfs.Draw(default_draw),
-      video: "video.mp4",
-      points: [],
-      loopSegments: [],
+      drawText: props.draw.str,
+      currentTime: 0,
     };
     this.player = React.createRef();
     this.videoSelector = React.createRef();
@@ -47,9 +45,10 @@ class App extends React.Component {
                 </div>
               </div>
               <Player
-                video={this.state.video}
+                video={this.props.video}
                 player={this.player}
-                loopSegments={this.state.loopSegments}
+                loopSegments={this.props.loopSegments}
+                onTimeUpdate={this.handleTimeUpdate}
               />
               <div className="btn-toolbar mb-4" role="toolbar" aria-label="Player control">
                 <div className="btn-group ml-auto mr-2" role="group" aria-label="Playback rate">
@@ -62,30 +61,30 @@ class App extends React.Component {
                 </div>
                 <div className="btn-group" role="group">
                   <button className="btn btn-danger" onClick={this.reset}>Reset</button>
-                  <button disabled={this.state.points.length > 0 &&
-                        this.currentTime() < this.state.points[this.state.points.length - 1].time}
+                  <button disabled={this.props.points.length > 0 &&
+                        this.state.currentTime < this.props.points[this.props.points.length - 1].time}
                       className="btn btn-primary" style={{width: '200px'}} onClick={this.place}>
-                    Next formation <span>{this.nextFormation(this.state).name}</span>
+                    Next formation <span>{this.nextFormation().name}</span>
                   </button>
                 </div>
               </div>
             </div>
             <div className="col-lg-7">
               <Stats
-                points={this.state.points}
-                draw={this.state.draw}
+                points={this.props.points}
+                draw={this.props.draw}
                 onPointClick={this.handlePointClick}
                 onPageClick={this.handlePageClick}
                 onFormationClick={this.handleFormationClick}
-                currentTime={this.currentTime()}
+                currentTime={this.state.currentTime}
                 />
               <div className="btn-toolbar mt-4">
                 <Dev>
-                    <button className="btn btn-primary" onClick={this.savePoints}>Save</button>
+                    <button className="btn btn-primary" onClick={this.props.savePoints}>Save</button>
                     <button className="ml-2 btn btn-primary" onClick={this.loadPoints}>Load</button>
                 </Dev>
                 <button className="btn btn-danger ml-2"
-                    disabled={this.state.loopSegments.length === 0}
+                    disabled={this.props.loopSegments.length === 0}
                     onClick={this.resetLoopSegments}>
                   <span className="gryphicon glyphicon-search"/>Cancel loop
                 </button>
@@ -97,11 +96,8 @@ class App extends React.Component {
     );
   }
 
-  currentTime() {
-    if (this.player.current) {
-      return this.player.current.currentTime;
-    }
-    return null;
+  handleTimeUpdate = currentTime => {
+    this.setState({currentTime});
   }
 
   updateDrawText = e => {
@@ -112,19 +108,15 @@ class App extends React.Component {
 
   updateDraw = () => {
     this.reset();
-    this.setState((state) => ({
-      draw: new vfs.Draw(state.drawText)
-    }));
+    this.props.setDraw(this.state.drawText);
   }
 
   place = () => {
-    this.setState(state => ({
-      points: [...state.points, { time: this.player.current.currentTime }]
-    }));
+    this.props.placePoint(this.player.current.currentTime);
   }
 
   reset = () => {
-    this.setState({points: []});
+    this.props.resetPoints();
   }
 
   togglePlay = () => {
@@ -142,55 +134,60 @@ class App extends React.Component {
 
   handlePointClick = (stats, point_id) => {
     const start = point_id > 0 ?
-      this.state.points[point_id - 1].time :
-      Math.max(0, this.state.points[0].time - 1.5);
-    const finish = this.state.points[point_id].time;
+      this.props.points[point_id - 1].time :
+      Math.max(0, this.props.points[0].time - 1.5);
+    const finish = this.props.points[point_id].time;
 
-    this.setState({
-      loopSegments: [{start, finish}]
-    });
+    this.props.setLoopSegments([{start, finish}]);
   }
 
   handlePageClick = (stats, page) => {
-    this.setState({
-      loopSegments: [stats.pages[page]]
-    });
+    this.props.setLoopSegments([stats.pages[page]]);
   }
 
   handleFormationClick = (stats, formation) => {
     const loopSegments = stats.formations[formation].map(point =>
         ({start: point.time - point.incremental, finish: point.time}));
-    this.setState({loopSegments});
+    this.props.setLoopSegments(loopSegments);
   }
 
   resetLoopSegments = () => {
-    this.setState({loopSegments: []});
+    this.props.setLoopSegments([]);
   }
 
-  nextFormation(state) {
-    return state.draw.formation(state.points.length);
-  }
-
-  savePoints = () => {
-    localStorage.setItem('draw', this.state.draw.str);
-    localStorage.setItem('points', JSON.stringify(this.state.points));
+  nextFormation() {
+    return this.props.draw.formation(this.props.points.length);
   }
 
   loadPoints = () => {
-    const draw = localStorage.getItem('draw');
-    const points = JSON.parse(localStorage.getItem('points'));
+    this.props.loadPoints();
     this.setState({
-      drawText: draw,
-      draw: new vfs.Draw(draw),
-      points: points,
+      drawText: this.props.draw.str,
     });
   }
 
   openVideo = () => {
-    this.setState({
-      video: URL.createObjectURL(this.videoSelector.current.files[0])
-    });
+    this.props.openVideo(URL.createObjectURL(this.videoSelector.current.files[0]));
   }
 };
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    points: state.vfs.points,
+    draw: state.vfs.draw,
+    loopSegments: state.vfs.loopSegments,
+    video: state.vfs.video,
+  };
+};
+
+export default connect(mapStateToProps,
+  {
+    resetPoints,
+    placePoint,
+    loadPoints,
+    savePoints,
+    setDraw,
+    setLoopSegments,
+    openVideo,
+  }
+)(App);
