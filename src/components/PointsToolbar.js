@@ -1,7 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
+import { connect } from 'react-redux';
 import { resetPoints, placePoint } from '../redux/vfs/actions';
+
+import { ButtonGroup, Button } from 'react-bootstrap';
 
 export default connect(state => ({
     draw: state.vfs.draw,
@@ -12,15 +14,20 @@ export default connect(state => ({
   }
 )(class PointsToolbar extends React.Component {
   render() {
+    const disablePlace = this.props.points.length > 0 &&
+        this.props.currentTime < this.props.points[this.props.points.length - 1].time;
+
     return (
-      <>
-        <button className="btn btn-danger" onClick={this.props.resetPoints}>Reset</button>
-        <button disabled={this.props.points.length > 0 &&
-              this.props.currentTime < this.props.points[this.props.points.length - 1].time}
-            className="btn btn-primary" style={{width: '200px'}} onClick={this.place}>
+      <ButtonGroup>
+        <Button variant="danger" onClick={this.props.resetPoints}>Reset</Button>
+        <Button
+            onClick={this.place}
+            disabled={disablePlace}
+            style={{width: '200px'}}
+            variant="primary" >
           Next formation <span>{this.nextFormation().name}</span>
-        </button>
-      </>
+        </Button>
+      </ButtonGroup>
     );
   }
 

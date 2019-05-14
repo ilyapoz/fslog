@@ -16,7 +16,8 @@ export default function PlaybackRate({onChange}) {
         value={rate}
         onChange={handleChange}
         className="ml-auto mr-2">
-      {[0.2, 0.5, 1.0].map(rate => <ToggleButton key={rate} variant="secondary" value={rate}>{rate.toFixed(1)}</ToggleButton>)}
+      {[0.2, 0.5, 1.0].map(rate =>
+          <ToggleButton key={rate} variant="secondary" value={rate}>{rate.toFixed(1)}</ToggleButton>)}
     </ToggleButtonGroup>
   );
 };

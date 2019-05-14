@@ -1,32 +1,24 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
+import { connect } from 'react-redux';
 import { setDraw } from '../redux/vfs/actions';
+
+import { Form } from 'react-bootstrap';
 
 export default connect(state => ({
     draw: state.vfs.draw,
   }), {
     setDraw,
   }
-)(class DrawEditor extends React.Component {
-  state = { drawText: this.props.draw.str };
-
-  render() {
-    return (
-      <div className="input-group">
-        <input type="text" className="form-control" value={this.state.drawText} onChange={this.updateDrawText}/>
-        <div className="input-group-append">
-          <button className="btn btn-danger" type="button" onClick={this.updateDraw}>Update</button>
-        </div>
-      </div>
-    );
+)(function DrawEditor({draw, setDraw}) {
+  const updateDraw = e => {
+    setDraw(e.target.value);
   }
 
-  updateDrawText = e => {
-    this.setState({drawText: e.target.value});
-  }
-
-  updateDraw = () => {
-    this.props.setDraw(this.state.drawText);
-  }
+  return (
+    <Form.Group>
+      <Form.Label className="mr-2">Draw:</Form.Label>
+      <Form.Control type="text" value={draw.str} onChange={updateDraw} />
+    </Form.Group>
+  );
 });

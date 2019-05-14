@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Table, Button, ButtonToolbar, Form } from 'react-bootstrap';
+
 import { connect } from 'react-redux';
 import { loadPoints, savePoints, setLoopSegments } from '../redux/vfs/actions';
 
@@ -25,19 +27,23 @@ export default connect(state => ({
   render() {
     const stats = this.props.stats;
     const num_points = this.props.points.length;
+
     const pages = Array.from({length: stats.pages.length}, (v, i) => (
       <th scope="col" key={i}>
-        <button className="btn btn-link" onClick={() => { this.handlePageClick(i) }}>{i + 1}</button>
+        <Button variant="link" onClick={() => { this.handlePageClick(i) }}>{i + 1}</Button>
       </th>
     ));
+
     const points = stats.formations.map((formation, id) => (
       <tr key={id}>
+        {/* formations column */}
         <th scope="row">
-          <button className="btn btn-link" onClick={() => { this.handleFormationClick(id) }}>
+          <Button variant="link" onClick={() => { this.handleFormationClick(id) }}>
             {this.props.draw.formation(id).name}
-          </button>
+          </Button>
         </th>
-        {
+
+        { // points
           Array.from({length: stats.pages.length}, (v, id) => {
             if (id >= formation.length) {
               return <td key={id}/>;
@@ -45,54 +51,62 @@ export default connect(state => ({
             const point = formation[id];
             return (
               <td key={id} className={this.pointActive(point) ? "table-active": ""}>
-                <button className="btn btn-link" onClick={() => { this.handlePointClick(point.id) }}>
+                <Button variant="link" onClick={() => { this.handlePointClick(point.id) }}>
                   <Time>{this.state.cumulative ? point.cumulative : point.incremental}</Time>
-                </button>
+                </Button>
               </td>
             );
           })
         }
+        {/* Formation totals column */}
         <td><div><Time>{formation.reduce((res, el) => res + el.incremental, 0)}</Time></div></td>
       </tr>
     ));
+
     return (
       <>
-        <table className="table">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            {pages}
-            <th scope="col">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {points}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th scope="row">Total</th>
-            {stats.pages.map((page, id) => <th scope="col" key={id}><Time>{page.finish - page.start}</Time></th>)}
-            <th scope="col"><Time>{(num_points === 0 ? 0 : stats.finish_time - stats.start_time)}</Time></th>
-          </tr>
-        </tfoot>
-        </table>
-        <div className="form-check">
-          <label className="form-check-label">
-          <input type="checkbox" className="form-check-input"
-            checked={this.state.cumulative} onChange={this.cumulativeChanged}/>
-          Cumulative time</label>
-        </div>
-        <div className="btn-toolbar mt-4">
+        <Table>
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              {pages}
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {points}
+          </tbody>
+
+          <tfoot>
+            <tr>
+              <th scope="row">Total</th>
+              {stats.pages.map((page, id) => <th scope="col" key={id}><Time>{page.finish - page.start}</Time></th>)}
+              <th scope="col"><Time>{(num_points === 0 ? 0 : stats.finish_time - stats.start_time)}</Time></th>
+            </tr>
+          </tfoot>
+        </Table>
+
+        <Form.Check
+          id="cumulative-time"
+          type="checkbox"
+          label="Cumulative time"
+          checked={this.state.cumulative}
+          onChange={this.cumulativeChanged}/>
+
+        <ButtonToolbar className="mt-4">
           <Dev>
-              <button className="btn btn-primary" onClick={this.props.savePoints}>Save</button>
-              <button className="ml-2 btn btn-primary" onClick={this.props.loadPoints}>Load</button>
+              <Button variant="primary" onClick={this.props.savePoints}>Save</Button>
+              <Button variant="primary" className="ml-2" onClick={this.props.loadPoints}>Load</Button>
           </Dev>
-          <button className="btn btn-danger ml-2"
+          <Button
               disabled={this.props.loopSegments.length === 0}
-              onClick={this.resetLoopSegments}>
+              onClick={this.resetLoopSegments}
+              variant="danger"
+              className="ml-2" >
             <span className="gryphicon glyphicon-search"/>Cancel loop
-          </button>
-        </div>
+          </Button>
+        </ButtonToolbar>
       </>
     );
   }

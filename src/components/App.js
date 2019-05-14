@@ -3,7 +3,7 @@ import './App.scss';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { ButtonToolbar } from 'react-bootstrap';
+import { Container, Row, Col, Navbar, ButtonToolbar } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
@@ -30,19 +30,18 @@ export default connect(state => ({
   render() {
     return (
       <>
-        <nav className="navbar navbar-expand-xl sticky-top navbar-dark bg-dark">
-          <a className="navbar-brand" href="/#">FS log</a>
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarToggler">
-          </div>
-        </nav>
-        <div className="container-fluid p-3">
-          <div className="row">
-            <div className="col-lg-5">
+        <Navbar variant="dark" bg="dark" expand="xl" className="sticky-top">
+          <Navbar.Brand href="/#">FS log</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+          <Navbar.Collapse id="basic-navbar-nav">
+          </Navbar.Collapse>
+        </Navbar>
+
+        <Container fluid={true} className="p-3">
+          <Row>
+            <Col lg={5}>
               <div className="form-inline mb-4">
-                <DrawEditor key={this.props.drawId} />
+                <DrawEditor />
                 <VideoSelector />
               </div>
               <Player
@@ -52,18 +51,17 @@ export default connect(state => ({
               />
               <ButtonToolbar className="mb-4">
                 <PlaybackRate onChange={this.playbackRate}/>
-                <div className="btn-group" role="group">
-                  <PointsToolbar
-                    currentTime={this.state.currentTime}
-                    currentRealtime={this.currentRealtime}/>
-                </div>
+                <PointsToolbar
+                  currentTime={this.state.currentTime}
+                  currentRealtime={this.currentRealtime}/>
               </ButtonToolbar>
-            </div>
-            <div className="col-lg-7">
+            </Col>
+
+            <Col>
               <Stats currentTime={this.state.currentTime} />
-            </div>
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </Container>
       </>
     );
   }
