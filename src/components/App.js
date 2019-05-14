@@ -52,9 +52,6 @@ export default connect(state => ({
               />
               <ButtonToolbar className="mb-4">
                 <PlaybackRate onChange={this.playbackRate}/>
-                <div className="btn-group mr-2" role="group">
-                  <button className="btn btn-primary" onClick={this.togglePlay}>Toggle play</button>
-                </div>
                 <div className="btn-group" role="group">
                   <PointsToolbar
                     currentTime={this.state.currentTime}
@@ -69,15 +66,6 @@ export default connect(state => ({
         </div>
       </>
     );
-  }
-
-  togglePlay = () => {
-    let player = this.player.current;
-    if (player.paused) {
-      player.play();
-    } else {
-      player.pause();
-    }
   }
 
   handleTimeUpdate = currentTime => {
