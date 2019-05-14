@@ -3,9 +3,12 @@ import './App.scss';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { ButtonToolbar } from 'react-bootstrap';
+
 import { connect } from 'react-redux';
 
 import DrawEditor from './DrawEditor';
+import PlaybackRate from './PlaybackRate';
 import Player from './Player';
 import PointsToolbar from './PointsToolbar';
 import Stats from './Stats';
@@ -46,12 +49,8 @@ export default connect(state => ({
                 player={this.player}
                 onTimeUpdate={this.handleTimeUpdate}
               />
-              <div className="btn-toolbar mb-4" role="toolbar" aria-label="Player control">
-                <div className="btn-group ml-auto mr-2" role="group" aria-label="Playback rate">
-                  <button className="btn btn-secondary" onClick={() => this.playbackRate(0.2)}>0.2</button>
-                  <button className="btn btn-secondary" onClick={() => this.playbackRate(0.5)}>0.5</button>
-                  <button className="btn btn-secondary" onClick={() => this.playbackRate(1.0)}>1.0</button>
-                </div>
+              <ButtonToolbar className="mb-4">
+                <PlaybackRate onChange={this.playbackRate}/>
                 <div className="btn-group mr-2" role="group">
                   <button className="btn btn-primary" onClick={this.togglePlay}>Toggle play</button>
                 </div>
@@ -60,7 +59,7 @@ export default connect(state => ({
                     currentTime={this.state.currentTime}
                     currentRealtime={() => this.player.current.currentTime}/>
                 </div>
-              </div>
+              </ButtonToolbar>
             </div>
             <div className="col-lg-7">
               <Stats currentTime={this.state.currentTime} />
@@ -84,7 +83,7 @@ export default connect(state => ({
     this.setState({currentTime});
   }
 
-  playbackRate(rate) {
+  playbackRate = rate => {
     this.player.current.playbackRate = rate;
   }
 });
