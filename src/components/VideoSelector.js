@@ -12,7 +12,7 @@ export default connect(state => ({
 
   const handleOpen = () => {
     openVideo(URL.createObjectURL(videoSelector.current.files[0]));
-  }
+  };
 
   return (
     <input className="ml-auto" type="file" accept="video/*" ref={videoSelector} onChange={handleOpen}/>
