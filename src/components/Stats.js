@@ -2,7 +2,7 @@ import React from 'react';
 
 import Time from './Time.js';
 
-class Stats extends React.Component {
+export default class Stats extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,7 +78,7 @@ class Stats extends React.Component {
     return point.time - point.incremental + 0.1 < this.props.currentTime && this.props.currentTime < point.time - 0.1;
   }
 
-  cumulativeChanged = (e) => {
+  cumulativeChanged = e => {
     this.setState({cumulative: e.target.checked});
   }
 
@@ -97,5 +97,3 @@ class Stats extends React.Component {
     e.preventDefault();
   }
 };
-
-export default Stats;

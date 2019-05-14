@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Player extends React.Component {
+export default class Player extends React.Component {
   render() {
     return (
       <video ref={this.props.player}
@@ -19,8 +19,6 @@ class Player extends React.Component {
     if (jump) {
       player.currentTime = jump;
     }
-
-    this.props.onTimeUpdate(player.currentTime);
   }
 
   calculateJump(time) {
@@ -28,7 +26,6 @@ class Player extends React.Component {
     if (!segments || segments.length === 0) {
       return null;
     }
-
 
     for (const segment of segments) {
       if (time < segment.start) {
@@ -43,5 +40,3 @@ class Player extends React.Component {
     return segments[0].start; // loop
   }
 };
-
-export default Player;

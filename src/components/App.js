@@ -3,10 +3,10 @@ import './App.scss';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Dev from './Dev.js';
-import Player from './Player.js';
-import Stats from './Stats.js';
-import vfs from './vfs.js';
+import Dev from './Dev';
+import Player from './Player';
+import Stats from './Stats';
+import vfs from '../lib/vfs.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +18,6 @@ class App extends React.Component {
       video: "video.mp4",
       points: [],
       loopSegments: [],
-      currentTime: null,
     };
     this.player = React.createRef();
     this.videoSelector = React.createRef();
@@ -51,7 +50,7 @@ class App extends React.Component {
                 video={this.state.video}
                 player={this.player}
                 loopSegments={this.state.loopSegments}
-                onTimeUpdate={this.handleTimeUpdate}/>
+              />
               <div className="btn-toolbar mb-4" role="toolbar" aria-label="Player control">
                 <div className="btn-group ml-auto mr-2" role="group" aria-label="Playback rate">
                   <button className="btn btn-secondary" onClick={() => this.playbackRate(0.2)}>0.2</button>
@@ -64,7 +63,7 @@ class App extends React.Component {
                 <div className="btn-group" role="group">
                   <button className="btn btn-danger" onClick={this.reset}>Reset</button>
                   <button disabled={this.state.points.length > 0 &&
-                        this.state.currentTime < this.state.points[this.state.points.length - 1].time}
+                        this.currentTime() < this.state.points[this.state.points.length - 1].time}
                       className="btn btn-primary" style={{width: '200px'}} onClick={this.place}>
                     Next formation <span>{this.nextFormation(this.state).name}</span>
                   </button>
@@ -78,7 +77,7 @@ class App extends React.Component {
                 onPointClick={this.handlePointClick}
                 onPageClick={this.handlePageClick}
                 onFormationClick={this.handleFormationClick}
-                currentTime={this.state.currentTime}
+                currentTime={this.currentTime()}
                 />
               <div className="btn-toolbar mt-4">
                 <Dev>
@@ -98,7 +97,14 @@ class App extends React.Component {
     );
   }
 
-  updateDrawText = (e) => {
+  currentTime() {
+    if (this.player.current) {
+      return this.player.current.currentTime;
+    }
+    return null;
+  }
+
+  updateDrawText = e => {
     this.setState({
       drawText: e.target.value
     });
@@ -112,11 +118,9 @@ class App extends React.Component {
   }
 
   place = () => {
-    this.setState((state) => ({
-      points: state.points.concat(
-        {
-          time: this.player.current.currentTime,
-    })}));
+    this.setState(state => ({
+      points: [...state.points, { time: this.player.current.currentTime }]
+    }));
   }
 
   reset = () => {
@@ -154,7 +158,7 @@ class App extends React.Component {
   }
 
   handleFormationClick = (stats, formation) => {
-    const loopSegments = stats.formations[formation].map((point) =>
+    const loopSegments = stats.formations[formation].map(point =>
         ({start: point.time - point.incremental, finish: point.time}));
     this.setState({loopSegments});
   }
@@ -186,10 +190,6 @@ class App extends React.Component {
     this.setState({
       video: URL.createObjectURL(this.videoSelector.current.files[0])
     });
-  }
-
-  handleTimeUpdate = (currentTime) => {
-    this.setState({currentTime});
   }
 };
 
