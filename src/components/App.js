@@ -11,7 +11,7 @@ import Landing from './Landing';
 export default function App() {
   return (
     <Router>
-      <Navbar variant="dark" bg="dark" expand="md" className="sticky-top">
+      <Navbar variant="dark" bg="dark" expand="md">
         <Navbar.Brand as={Link} to="/">FS log</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
         <Navbar.Collapse id="basic-navbar-nav">
