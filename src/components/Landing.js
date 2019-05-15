@@ -8,7 +8,7 @@ export default function Landing() {
   return (
     <Container className="mt-4">
       <Jumbotron>
-        <h1>Welcome to Formation&nbsp;Skydiving log!</h1>
+        <h1>Welcome to Formation Skydiving log!</h1>
 
         <p>
           I tried to create a means to log training/competition timings for randoms and block points to track
