@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { loadPoints, savePoints, setLoopSegments } from '../redux/vfs/actions';
 
 import Dev from './Dev';
-import Time from './Time.js';
+import Time from './Time';
 
 export default connect(state => ({
     points: state.vfs.points,
