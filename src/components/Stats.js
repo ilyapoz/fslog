@@ -104,7 +104,7 @@ export default connect(state => ({
               onClick={this.resetLoopSegments}
               variant="danger"
               className="ml-2" >
-            <span className="gryphicon glyphicon-search"/>Cancel loop
+            Cancel loop
           </Button>
         </ButtonToolbar>
       </>
