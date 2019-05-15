@@ -20,7 +20,7 @@ export default function Landing() {
         </p>
 
         <p>
-          This was mostly an excercise for me to learn React/Redux/Firebase, but hopefully this has some value.
+          This was mostly an excercise for me to learn Bootstrap/React/Redux/Firebase, but hopefully this has some value.
         </p>
 
         <p>
