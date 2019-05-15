@@ -3,21 +3,24 @@ import React from 'react';
 import { Container, Row, Col, ButtonToolbar, Form } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
-import { setDraw } from '../redux/vfs/actions';
+import { setDraw, openVideo } from '../../redux/vfs/actions';
 
-import DrawEditor from './DrawEditor';
+import DrawEditor from '../lib/DrawEditor';
+import Player from '../lib/Player';
+import VideoSelector from '../lib/VideoSelector';
+
 import PlaybackRate from './PlaybackRate';
-import Player from './Player';
 import PointsToolbar from './PointsToolbar';
 import Stats from './Stats';
-import VideoSelector from './VideoSelector';
 
 export default connect(state => ({
     video: state.vfs.video,
     draw: state.vfs.draw,
     drawId: state.vfs.drawId,
+    loogSegments: state.vfs.loopSegments,
   }), {
-    setDraw
+    setDraw,
+    openVideo,
   }
 )(class Round extends React.Component {
   state = {
@@ -34,18 +37,19 @@ export default connect(state => ({
           <Col lg={5}>
             <Form inline className="mb-2">
               <DrawEditor draw={this.props.draw} setDraw={setDraw} />
-              <VideoSelector />
+              <VideoSelector openVideo={this.props.openVideo} />
             </Form>
             <Player
               video={this.props.video}
               player={this.player}
               onTimeUpdate={this.handleTimeUpdate}
+              loopSegments={this.props.loopSegments}
             />
             <ButtonToolbar className="mb-4">
-              <PlaybackRate onChange={this.playbackRate}/>
+              <PlaybackRate onChange={this.playbackRate} />
               <PointsToolbar
                 currentTime={this.state.currentTime}
-                currentRealtime={this.currentRealtime}/>
+                currentRealtime={this.currentRealtime} />
             </ButtonToolbar>
           </Col>
 

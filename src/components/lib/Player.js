@@ -1,11 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
-export default connect(state => ({
-    loopSegments: state.vfs.loopSegments,
-  }),{
-  }
-)(class Player extends React.Component {
+export default class Player extends React.Component {
   render() {
     return (
       <video ref={this.props.player}
@@ -45,4 +40,4 @@ export default connect(state => ({
 
     return segments[0].start; // loop
   }
-});
+};

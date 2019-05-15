@@ -3,10 +3,10 @@ import React from 'react';
 import { Table, Button, ButtonToolbar, Form } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
-import { loadPoints, savePoints, setLoopSegments } from '../redux/vfs/actions';
+import { loadPoints, savePoints, setLoopSegments } from '../../redux/vfs/actions';
 
-import Dev from './Dev';
-import Time from './Time';
+import Dev from '../lib/Dev';
+import Time from '../lib/Time';
 
 export default connect(state => ({
     points: state.vfs.points,

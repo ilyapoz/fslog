@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import { resetPoints, placePoint } from '../redux/vfs/actions';
+import { resetPoints, placePoint } from '../../redux/vfs/actions';
 
 import { ButtonGroup, Button } from 'react-bootstrap';
 
