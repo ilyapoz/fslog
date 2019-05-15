@@ -16,7 +16,6 @@ import Stats from './Stats';
 export default connect(state => ({
     video: state.vfs.video,
     draw: state.vfs.draw,
-    drawId: state.vfs.drawId,
     loogSegments: state.vfs.loopSegments,
   }), {
     setDraw,
