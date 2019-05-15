@@ -13,12 +13,12 @@ import PlaybackRate from './PlaybackRate';
 import PointsToolbar from './PointsToolbar';
 import Stats from './Stats';
 
+const ConnectedDrawEditor = connect(state => ({draw: state.vfs.draw.str}), {setDraw})(DrawEditor);
+
 export default connect(state => ({
     video: state.vfs.video,
-    draw: state.vfs.draw,
-    loogSegments: state.vfs.loopSegments,
+    loopSegments: state.vfs.loopSegments,
   }), {
-    setDraw,
     openVideo,
   }
 )(class Round extends React.Component {
@@ -35,7 +35,7 @@ export default connect(state => ({
         <Row>
           <Col lg={5}>
             <Form inline className="mb-2">
-              <DrawEditor draw={this.props.draw} setDraw={setDraw} />
+              <ConnectedDrawEditor />
               <VideoSelector openVideo={this.props.openVideo} />
             </Form>
             <Player
