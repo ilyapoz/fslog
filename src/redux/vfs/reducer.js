@@ -4,8 +4,7 @@ import vfs from '../../lib/vfs';
 
 
 const defaultState = (() => {
-  const drawText = 'G-13-14';
-  const draw = new vfs.Draw(drawText);
+  const draw = new vfs.Draw('G-13-14');
 
   return {
     draw,
