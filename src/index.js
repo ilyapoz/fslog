@@ -5,11 +5,16 @@ import App from './components/App.js';
 import * as serviceWorker from './serviceWorker';
 
 import { Provider } from 'react-redux';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+
 import store from './redux/store';
+import firebaseConfig from './firebase.js';
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <ReactReduxFirebaseProvider {...firebaseConfig} dispatch={store.dispatch}>
+      <App />
+    </ReactReduxFirebaseProvider>
   </Provider>,
   document.getElementById('root'));
 

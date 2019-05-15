@@ -1,4 +1,9 @@
 import { combineReducers } from 'redux';
 import { reducer as vfs } from './vfs/reducer';
 
-export default combineReducers({vfs});
+import { firebaseReducer } from 'react-redux-firebase'
+
+export default combineReducers({
+  vfs,
+  firebase: firebaseReducer
+});
