@@ -1,4 +1,4 @@
 import { combineReducers } from 'redux';
-import vfs from './vfs/reducer';
+import { reducer as vfs } from './vfs/reducer';
 
 export default combineReducers({vfs});

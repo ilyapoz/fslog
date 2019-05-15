@@ -4,13 +4,14 @@ import { Table, Button, ButtonToolbar, Form } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 import { loadPoints, savePoints, setLoopSegments } from '../../redux/vfs/actions';
+import { statsSelector } from '../../redux/vfs/reducer';
 
 import Dev from '../lib/Dev';
 import Time from '../lib/Time';
 
 export default connect(state => ({
     points: state.vfs.points,
-    stats: state.vfs.stats,
+    stats: statsSelector(state.vfs),
     draw: state.vfs.draw,
     loopSegments: state.vfs.loopSegments,
   }),

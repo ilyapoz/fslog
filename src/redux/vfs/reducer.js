@@ -1,27 +1,30 @@
-import {Type} from './actions';
+import { createSelector } from 'reselect';
+
+import { Type } from './actions';
 
 import vfs from '../../lib/vfs';
 
+const defaultState = {
+  draw: new vfs.Draw('G-13-14'),
+  points: [],
+  loopSegments: [],
+  video: 'video.mp4',
+};
 
-const defaultState = (() => {
-  const draw = new vfs.Draw('G-13-14');
+const getDraw = state => state.draw;
+const getPoints = state => state.points;
 
-  return {
-    draw,
-    points: [],
-    stats: draw.stats([]),
-    loopSegments: [],
-    video: 'video.mp4',
-  };
-})();
+export const statsSelector = createSelector(
+  getDraw, getPoints,
+  (draw, points) => draw.stats(points) // TODO: optimize to incremental build
+);
 
-export default (state = defaultState, action) => {
+export const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case Type.RESET:
       return {
         ...state,
         points: [],
-        stats: state.draw.stats([]),
         loopSegments: [],
       };
 
@@ -30,16 +33,13 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         points: new_points,
-        stats: state.draw.stats(new_points), // TODO: optimize here
       };
 
     case Type.SET_DRAW: {
-      const draw = new vfs.Draw(action.payload);
       return {
         ...state,
-        draw,
+        draw: new vfs.Draw(action.payload),
         points: [],
-        stats: draw.stats([]),
         loopSegments: [],
       };
     }
@@ -51,13 +51,11 @@ export default (state = defaultState, action) => {
 
     case Type.LOAD_POINTS: {
       const drawText = localStorage.getItem('draw');
-      const draw = new vfs.Draw(drawText);
       const points = JSON.parse(localStorage.getItem('points'));
       return {
         ...state,
-        draw,
+        draw: new vfs.Draw(drawText),
         points,
-        stats: draw.stats(points),
         loopSegments: [],
       };
     }
@@ -73,7 +71,6 @@ export default (state = defaultState, action) => {
         ...state,
         video: action.payload,
         points: [],
-        stats: state.draw.stats([]),
         loopSegments: [],
       };
 
