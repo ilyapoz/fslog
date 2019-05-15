@@ -20,6 +20,10 @@ export default function Landing() {
         </p>
 
         <p>
+          This was mostly an excercise for me to learn React/Redux/Firebase, but hopefully this has some value.
+        </p>
+
+        <p>
           <LinkContainer to="/round">
             <Button variant="primary">Try it now!</Button>
           </LinkContainer>
