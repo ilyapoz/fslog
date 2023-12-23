@@ -1,4 +1,4 @@
-fs-log.firebaseapp.com
+https://fs-log.firebaseapp.com
 
 This is a formation skydiving and indoor FS/VFS timing app.
 It allows you to tally how much time was spent building different points or flying inters in a matter of a single slowed down playthrough of the round.
